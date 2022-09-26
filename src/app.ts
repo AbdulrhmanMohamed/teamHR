@@ -1,7 +1,6 @@
 import express, {Request, Response} from 'express';
 import cors from 'cors';
 import morgan from 'morgan';
-// import dotenv from 'dotenv';
 import dotenv from 'dotenv';
 import path from 'path';
 
