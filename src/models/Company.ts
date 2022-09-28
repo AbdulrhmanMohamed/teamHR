@@ -11,7 +11,7 @@ const schema = new Schema({
     },
     owner: {
         type: ObjectId,
-        ref: 'Member'
+        ref: 'User'
     },
 
 }, { timestamps: true })
@@ -19,7 +19,7 @@ export const Company = mongoose.model('company', schema);
 export function validateCompany(company: any) {
     const schema = Joi.object({
         name: Joi.string().min(1).max(255),
-        owner: Joi.objectId()
+        admin: Joi.objectId()
     });
     const result = schema.validate(company);
     return result;

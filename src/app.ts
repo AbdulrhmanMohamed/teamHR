@@ -3,7 +3,8 @@ import cors from 'cors';
 import morgan from 'morgan';
 import dotenv from 'dotenv';
 import path from 'path';
-import Joi from "joi"
+import Joi from "joi";
+
 Joi.objectId = require('joi-objectid')(Joi);
 
 const app = express();
