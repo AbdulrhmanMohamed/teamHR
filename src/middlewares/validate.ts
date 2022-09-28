@@ -6,4 +6,4 @@ export const validator = (validator: any, mode: any) => {
         if (error) return res.status(400).send(error.details[0].message);
         next();
     }
-}
+};
