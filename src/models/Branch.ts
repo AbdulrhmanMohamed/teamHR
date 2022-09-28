@@ -42,7 +42,7 @@ export function validateBranch(branch: any) {
     });
     const schema = Joi.object({
         branch_name: Joi.string().min(5).max(255),
-        // company: Joi.objectId(),
+        company: Joi.objectId(),
         shifts: Joi.array().items({
             work: shiftSchema,
             breaks: Joi.array().items(shiftSchema),

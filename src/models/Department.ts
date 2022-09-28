@@ -17,7 +17,8 @@ export const departmentSchema = new mongoose.Schema({
 export const Department = mongoose.model('Departments', departmentSchema);
 export function validateDepartment(department: any) {
     const schema = Joi.object({
-        name: Joi.string().min(2).max(255)
+        name: Joi.string().min(2).max(255).required(),
+        company: Joi.objectId().required()
     });
     const result = schema.validate(department);
     return result;

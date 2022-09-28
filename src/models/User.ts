@@ -48,10 +48,6 @@ const UserSchema = new Schema<UserI>({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Departments'
     },
-    company: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Company'
-    },
     branch: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Branches'
