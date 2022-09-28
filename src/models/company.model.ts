@@ -10,7 +10,7 @@ const schema = new Schema({
         min: 1,
         max: 255
     },
-    admin: {
+    owner: {
         type: ObjectId,
         ref: 'Member'
     },
