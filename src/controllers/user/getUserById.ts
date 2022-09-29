@@ -3,7 +3,7 @@ import User from "../../models/User";
 import { AuthenticatedReq } from "../../middlewares/auth";
 
 //@desc         get superadmin by id
-//@route        GET /api/v1/superadmins/:id
+//@route        GET /api/v1/users/superadmins/:id
 //@access       private(super admins)
 export const getSuperAdmin = async (req: AuthenticatedReq, res:Response, next:NextFunction) => {
     const userId = req.params.id;
@@ -16,7 +16,7 @@ export const getSuperAdmin = async (req: AuthenticatedReq, res:Response, next:Ne
 };
 
 //@desc         get root by id
-//@route        GET /api/v1/roots/:id
+//@route        GET /api/v1/users/roots/:id
 //@access       private(super admins)
 export const getRoot = async (req: AuthenticatedReq, res:Response, next:NextFunction) => {
     const userId = req.params.id;
@@ -29,7 +29,7 @@ export const getRoot = async (req: AuthenticatedReq, res:Response, next:NextFunc
 };
 
 //@desc         get all admins
-//@route        GET /api/v1/admins
+//@route        GET /api/v1/users/admins
 //@access       private(admin, root)
 export const getAdmin = async (req: AuthenticatedReq, res:Response, next:NextFunction) => {
     const userId = req.params.id;
@@ -42,7 +42,7 @@ export const getAdmin = async (req: AuthenticatedReq, res:Response, next:NextFun
 };
 
 //@desc         get all employees
-//@route        GET /api/v1/users
+//@route        GET /api/v1/users/employees
 //@access       private(admin, root, employee)
 export const getEmployee = async (req: AuthenticatedReq, res:Response, next:NextFunction) => {
     const userId = req.params.id;

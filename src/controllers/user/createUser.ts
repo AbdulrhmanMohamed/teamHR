@@ -5,7 +5,7 @@ import { Roles } from "../../types/enums";
 import { Company } from "../../models/Company";
 
 //@desc         create superadmin
-//@route        POST /api/v1/superadmins
+//@route        POST /api/v1/users/superadmins
 //@access       private(super admins)
 export const createSuperAdmin = async (req: AuthenticatedReq, res:Response, next:NextFunction) => {
     const createdUser = await User.create({...req.body, role: Roles.SUPER_ADMIN});
@@ -18,7 +18,7 @@ export const createSuperAdmin = async (req: AuthenticatedReq, res:Response, next
 };
 
 //@desc         create root
-//@route        POST /api/v1/roots
+//@route        POST /api/v1/users/roots
 //@access       private(super admins)
 export const createRoot = async (req: AuthenticatedReq, res:Response, next:NextFunction) => {
     const createdUser = await User.create({...req.body, role: Roles.ROOT});
@@ -32,7 +32,7 @@ export const createRoot = async (req: AuthenticatedReq, res:Response, next:NextF
 };
 
 //@desc         get all admins
-//@route        GET /api/v1/admins
+//@route        GET /api/v1/users/admins
 //@access       private(admin, root)
 export const createAdmin = async (req: AuthenticatedReq, res:Response, next:NextFunction) => {
     const admin = await User.create({...req.body, role: Roles.ADMIN});
@@ -44,7 +44,7 @@ export const createAdmin = async (req: AuthenticatedReq, res:Response, next:Next
 };
 
 //@desc         get all employees
-//@route        GET /api/v1/users
+//@route        GET /api/v1/users/employees
 //@access       private(admin, root)
 export const createEmployee = async (req: AuthenticatedReq, res:Response, next:NextFunction) => {
     const employee = await User.create({...req.body, role: Roles.EMPLOYEE});

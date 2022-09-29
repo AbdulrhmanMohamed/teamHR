@@ -4,7 +4,7 @@ import { AuthenticatedReq } from "../../middlewares/auth";
 import { Roles } from "../../types/enums";
 
 //@desc         update superadmin
-//@route        UPDATE /api/v1/superadmins/:id
+//@route        UPDATE /api/v1/users/superadmins/:id
 //@access       private(super admins)
 export const updateSuperAdmin = async (req: AuthenticatedReq, res:Response, next:NextFunction) => {
     const updatedSuperAdmin = await User.updateOne({_id: req.params.id, role: Roles.SUPER_ADMIN}, req.body, {new: true});
@@ -20,7 +20,7 @@ export const updateSuperAdmin = async (req: AuthenticatedReq, res:Response, next
 };
 
 //@desc         update root
-//@route        UPDATE /api/v1/roots/:id
+//@route        UPDATE /api/v1/users/roots/:id
 //@access       private(super admins)
 export const updateRoot = async (req: AuthenticatedReq, res:Response, next:NextFunction) => {
     const updatedRoot = await User.updateOne({_id: req.params.id, role: Roles.ROOT}, req.body, {new: true});
@@ -36,7 +36,7 @@ export const updateRoot = async (req: AuthenticatedReq, res:Response, next:NextF
 };
 
 //@desc         Update admin
-//@route        UPDATE /api/v1/admins/:id
+//@route        UPDATE /api/v1/users/admins/:id
 //@access       private(admin, root)
 export const updateAdmin = async (req: AuthenticatedReq, res:Response, next:NextFunction) => {
     const updatedAdmin = await User.updateOne({_id: req.params.id, role: Roles.ADMIN, company: req.user!.company}, req.body, {new: true});
@@ -54,7 +54,7 @@ export const updateAdmin = async (req: AuthenticatedReq, res:Response, next:Next
 };
 
 //@desc         get all employees
-//@route        GET /api/v1/employees/:id
+//@route        GET /api/v1/users/employees/:id
 //@access       private(admin, root)
 export const updateEmployee = async (req: AuthenticatedReq, res:Response, next:NextFunction) => {
     const updatedEmployee = await User.updateOne({_id: req.params.id, role: Roles.EMPLOYEE, company: req.user!.company}, req.body, {new: true});

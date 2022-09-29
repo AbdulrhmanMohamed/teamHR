@@ -4,7 +4,7 @@ import { AuthenticatedReq } from "../../middlewares/auth";
 import { Roles } from "../../types/enums";
 
 //@desc         delete superadmin
-//@route        DELETE /api/v1/superadmins/:id
+//@route        DELETE /api/v1/users/superadmins/:id
 //@access       private(super admins)
 export const deleteSuperAdmin = async (req: AuthenticatedReq, res:Response, next:NextFunction) => {
     const deletedSuperAdmin = await User.deleteOne({_id: req.params.id, role: Roles.SUPER_ADMIN});
@@ -20,7 +20,7 @@ export const deleteSuperAdmin = async (req: AuthenticatedReq, res:Response, next
 };
 
 //@desc         delete root
-//@route        DELETE /api/v1/roots/:id
+//@route        DELETE /api/v1/users/roots/:id
 //@access       private(super admins)
 export const deleteRoot = async (req: AuthenticatedReq, res:Response, next:NextFunction) => {
     const deletedRoot = await User.deleteOne({_id: req.params.id, role: Roles.ROOT}, {new: true});
@@ -36,7 +36,7 @@ export const deleteRoot = async (req: AuthenticatedReq, res:Response, next:NextF
 };
 
 //@desc         delete admin
-//@route        PATCH /api/v1/admins/:id
+//@route        PATCH /api/v1/users/admins/:id
 //@access       private(admin, root)
 export const deleteAdmin = async (req: AuthenticatedReq, res:Response, next:NextFunction) => {
     const deletedAdmin = await User.deleteOne({_id: req.params.id, role: Roles.ADMIN, company: req.user!.company}, {new: true});
@@ -54,7 +54,7 @@ export const deleteAdmin = async (req: AuthenticatedReq, res:Response, next:Next
 };
 
 //@desc         delete employee
-//@route        PATCH /api/v1/employees/:id
+//@route        PATCH /api/v1/users/employees/:id
 //@access       private(admin, root)
 export const deleteEmployee = async (req: AuthenticatedReq, res:Response, next:NextFunction) => {
     const deletedEmployee = await User.deleteOne({_id: req.params.id, role: Roles.EMPLOYEE, company: req.user!.company}, {new: true});

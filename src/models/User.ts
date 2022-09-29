@@ -70,8 +70,8 @@ UserSchema.methods.isPasswordsMatched = async function (enteredPassword: string)
   };
   
 UserSchema.methods.createToken = function () {
-    return jwt.sign({ id: this._id, email: this.email }, process.env.JWT_KEY, {
-      expiresIn: +process.env.JWT_AGE / 1000,
+    return jwt.sign({ id: this._id, email: this.email }, process.env.JWT_KEY!, {
+      expiresIn: +process.env.JWT_AGE! / 1000,
     });
   };
 
