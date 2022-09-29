@@ -8,7 +8,7 @@ import { AuthenticatedReq } from "../../middlewares/auth";
 export const getSuperAdmin = async (req: AuthenticatedReq, res:Response, next:NextFunction) => {
     const userId = req.params.id;
     const superAdmin = await User.findById(userId);
-    if(!superAdmin) return res.status(404).send({success: false, message: 'user with this id not found'});
+    if(!superAdmin) return res.status(404).send({success: false, message: 'user with this id is not found'});
     return res.send({
         success: true,
         data: superAdmin,
@@ -21,7 +21,7 @@ export const getSuperAdmin = async (req: AuthenticatedReq, res:Response, next:Ne
 export const getRoot = async (req: AuthenticatedReq, res:Response, next:NextFunction) => {
     const userId = req.params.id;
     const root = await User.findById(userId);
-    if(!root) return res.status(404).send({success: false, message: 'user with this id not found'});
+    if(!root) return res.status(404).send({success: false, message: 'user with this id is not found'});
     return res.send({
         success: true,
         data: root,

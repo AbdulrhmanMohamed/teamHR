@@ -53,7 +53,7 @@ export const createAdmin = async (req: AuthenticatedReq, res:Response, next:Next
     };
 
     const admin = await User.create({...req.body, role: Roles.ADMIN});
-    return res.send({
+    return res.status(201).send({
         success: true,
         data: admin,
         message: 'admin is created successfully',
@@ -82,7 +82,7 @@ export const createEmployee = async (req: AuthenticatedReq, res:Response, next:N
     };
 
     const admin = await User.create({...req.body, role: Roles.ADMIN});
-    return res.send({
+    return res.status(201).send({
         success: true,
         data: admin,
         message: 'employee is created successfully',
