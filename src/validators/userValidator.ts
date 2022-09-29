@@ -34,7 +34,6 @@ const validateUser = (user: any) => {
         }),
         phone2: Joi.string().min(7).length(15).pattern(/^[0-9]+$/),
         nationalId: Joi.string().min(1).max(10),
-        role: Joi.string().valid(...Object.keys(Roles)),
         position: Joi.string().min(2).max(255),
         branch: Joi.string(),
         department: Joi.string(),

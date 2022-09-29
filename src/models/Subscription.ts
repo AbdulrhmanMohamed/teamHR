@@ -26,7 +26,7 @@ const SubscriptionSchema = new Schema<SubscriptionI>({
     },
     isActive: {
         type: Boolean,
-        default: false,
+        default: true,
     },
     isExpired: {
         type: Boolean, 
