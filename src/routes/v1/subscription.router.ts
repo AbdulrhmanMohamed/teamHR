@@ -1,5 +1,13 @@
 import { Router } from "express";
-import { createPackage, deletePackage, getAllPackages, getPackageById, updatePackage } from "../../controllers/packages";
+import { 
+     activateSubscription,
+     buySubscription,
+     createSubscription,
+     deleteSubscription,
+     getAllsubscriptions, 
+     getSubscriptionById, 
+     updateSubscription
+    } from "../../controllers/subscriptions";
 import { checkRole } from "../../middlewares/acsses";
 import { AuthenticationMiddleware } from "../../middlewares/auth";
 import { validator } from "../../middlewares/validate";
@@ -8,19 +16,26 @@ import validatePackage from "../../validators/packageValidator";
 
 const packageRouter = Router();
 
-packageRouter.route('/')
-    .get(getAllPackages)
-    .post(AuthenticationMiddleware,
-            checkRole(Roles.SUPER_ADMIN),
-            validator(validatePackage, "post"),
-            createPackage);
+packageRouter.route('/').all(
+    AuthenticationMiddleware,
+    checkRole(Roles.SUPER_ADMIN))
+    .get(getAllsubscriptions)
+    .post(
+    validator(validatePackage, "post"),
+    createSubscription);
 
 packageRouter.route('/:id')
-    .get(getPackageById)
-    .all(AuthenticationMiddleware,
-        checkRole(Roles.SUPER_ADMIN))
-    .put(validator(validatePackage, "put"), updatePackage)
-    .delete(deletePackage);
+    .all(AuthenticationMiddleware)
+    .get(checkRole(Roles.SUPER_ADMIN, Roles.ROOT), getSubscriptionById)
+    .put(checkRole(Roles.SUPER_ADMIN), validator(validatePackage, "put"), updateSubscription)
+    .delete(checkRole(Roles.SUPER_ADMIN), deleteSubscription)
+    .post(checkRole(Roles.SUPER_ADMIN, Roles.ROOT), activateSubscription)
+
+packageRouter.route('/user/:id').post(
+    AuthenticationMiddleware, 
+    checkRole(Roles.SUPER_ADMIN, Roles.ROOT),
+    buySubscription
+    )
 
 export default packageRouter;
 

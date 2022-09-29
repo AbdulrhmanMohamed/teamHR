@@ -5,8 +5,8 @@ import { Roles } from "../../types/enums";
 
 //@desc         get all subscription
 //@route        GET /api/v1/subscriptions
-//@access       public
-export const getAllsubscription = async (req: AuthenticatedReq, res: Response, next: NextFunction) => {
+//@access       private(super admin)
+export const getAllsubscriptions = async (req: AuthenticatedReq, res: Response, next: NextFunction) => {
     const allsubscriptions = await Subscription.find({});
     res.send({
         success: true,
@@ -19,6 +19,10 @@ export const getAllsubscription = async (req: AuthenticatedReq, res: Response, n
 //@route        GET /api/v1/subscriptions/:id
 //@access       private(super admin, Root)
 export const getSubscriptionById = async (req: AuthenticatedReq, res: Response, next: NextFunction) => {
+    if(req.user!.role === Roles.ROOT && req.user!._id !== req.params.id) return res.status(401).send({
+        success: false,
+        message: 'user not allowed',
+    });
     const SubscriptionFetched = await Subscription.findById(req.params.id);
     res.send({
         success: true,
