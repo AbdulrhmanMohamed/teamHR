@@ -24,6 +24,8 @@ export interface UserI{
     department: ObjectId,
     company: ObjectId,
     branch: ObjectId,
+    createToken: () => string,
+    isPasswordsMatched: () => Promise<boolean>
 }
 
 const UserSchema = new Schema<UserI>({
@@ -63,7 +65,7 @@ UserSchema.pre('save', async function (next) {
   });
   
 //   Check if passwords are mathced
-UserSchema.methods.isPasswordMatched = async function (enteredPassword: string) {
+UserSchema.methods.isPasswordsMatched = async function (enteredPassword: string) {
     return await bcrypt.compare(enteredPassword, this.password);
   };
   

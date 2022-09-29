@@ -2,27 +2,29 @@ import { NextFunction, Request, Response } from "express";
 import User from "../../models/User";
 import { AuthenticatedReq } from "../../middlewares/auth";
 
-//@desc         get all superadmins
-//@route        GET /api/v1/superadmins
+//@desc         create superadmin
+//@route        POST /api/v1/superadmins
 //@access       private(super admins)
-export const getAllSuperAdmins = async (req: AuthenticatedReq, res:Response, next:NextFunction) => {
-    const allSupervisors = await User.find({role: 'super admin'});
-    return res.send({
+export const createSuperAdmin = async (req: AuthenticatedReq, res:Response, next:NextFunction) => {
+    const createdUser = await User.create(req.body);
+    const token = createdUser.createToken();
+    res.status(201).header('Authorization', token).json({
         success: true,
-        data: allSupervisors,
-        message: 'Users are fetched successfully',
+        message: 'super admin is created successfully',
+        data: createdUser
     });
 };
 
-//@desc         get all roots
-//@route        GET /api/v1/roots
+//@desc         create root
+//@route        POST /api/v1/roots
 //@access       private(super admins)
-export const getAllRoots = async (req: AuthenticatedReq, res:Response, next:NextFunction) => {
-    const allRoots = await User.find({role: 'root'});
-    return res.send({
+export const createRoot = async (req: AuthenticatedReq, res:Response, next:NextFunction) => {
+    const createdUser = await User.create(req.body);
+    const token = createdUser.createToken();
+    res.status(201).header('Authorization', token).json({
         success: true,
-        data: allRoots,
-        message: 'Users are fetched successfully',
+        message: 'root is created successfully',
+        data: createdUser
     });
 };
 
