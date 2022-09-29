@@ -32,12 +32,18 @@ const validateUser = (user: any) => {
             post: (schema) => schema.required(),
             put: (schema) => schema.forbidden(),
         }),
+        company: Joi.when('role', {
+            is: Joi.valid(Roles.EMPLOYEE, Roles.ADMIN),
+            then: Joi.string().alter({
+                post: (schema) => schema.required(),
+                put: (schema) => schema.forbidden(),
+            })
+        }),
         phone2: Joi.string().min(7).length(15).pattern(/^[0-9]+$/),
         nationalId: Joi.string().min(1).max(10),
         position: Joi.string().min(2).max(255),
         branch: Joi.string(),
         department: Joi.string(),
-        company: Joi.string(),
         nationality: Joi.string().min(5).max(255).valid(...nationalities),
         addresss: Joi.string().min(10).max(255),
         city: Joi.string().min(2).max(50),
