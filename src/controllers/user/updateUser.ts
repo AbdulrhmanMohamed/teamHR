@@ -54,7 +54,7 @@ export const updateAdmin = async (req: AuthenticatedReq, res:Response, next:Next
 };
 
 //@desc         get all employees
-//@route        GET /api/v1/users
+//@route        GET /api/v1/employees/:id
 //@access       private(admin, root)
 export const updateEmployee = async (req: AuthenticatedReq, res:Response, next:NextFunction) => {
     const updatedEmployee = await User.updateOne({_id: req.params.id, role: Roles.EMPLOYEE, company: req.user!.company}, req.body, {new: true});
