@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { getAllAdmins, getAllEmployees, getAllRoots, getAllSuperAdmins } from "../../controllers/user/getAllUsers";
+import { addUser } from "../../controllers/user/user.controller";
 import { checkRole } from "../../middlewares/acsses";
 import { AuthenticationMiddleware } from "../../middlewares/auth";
 import { Roles } from "../../types/enums";
@@ -20,3 +21,6 @@ userRouter.route('/admins')
 userRouter.route('/roots')
     .all(AuthenticationMiddleware, checkRole(Roles.ADMIN, Roles.ROOT))
     .get(getAllRoots);
+
+userRouter.post('/addUser', addUser)
+export default userRouter

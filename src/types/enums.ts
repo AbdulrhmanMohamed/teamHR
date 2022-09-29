@@ -1,4 +1,4 @@
-export const  maritalStatus = [ 'single', 'married', 'widowed', 'divorced', 'separated', 'other'];
+export const maritalStatus = ['single', 'married', 'widowed', 'divorced', 'separated', 'other'];
 export enum MartialStatusEnum {
     SINGLE = "single",
     MARRIED = "married",
@@ -209,3 +209,4 @@ export const nationalities = [
     'Zambian',
     'Zimbabwean'
 ];
+export const days = [0, 1, 2, 3, 4, 5, 6]

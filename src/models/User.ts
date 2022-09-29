@@ -1,4 +1,4 @@
-import mongoose, { ObjectId, Schema, model } from 'mongoose';
+import mongoose, { ObjectId, Schema, model, Callback } from 'mongoose';
 import {  MartialStatusEnum, Roles } from '../types/enums';
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken';
@@ -63,16 +63,16 @@ UserSchema.pre('save', async function (next) {
   });
   
 //   Check if passwords are mathced
+
 UserSchema.methods.isPasswordMatched = async function (enteredPassword: string) {
     return await bcrypt.compare(enteredPassword, this.password);
   };
   
 UserSchema.methods.createToken = function () {
-    return jwt.sign({ id: this._id, email: this.email }, process.env.JWT_KEY, {
-      expiresIn: +process.env.JWT_AGE / 1000,
+    return jwt.sign({ id: this._id, email: this.email }, process.env.JWT_KEY!, {
+      expiresIn: +process.env.JWT_AGE! / 1000,
     });
   };
-
 const User = model<UserI>('User', UserSchema);
 
 export default User;

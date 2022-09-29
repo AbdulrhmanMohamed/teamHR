@@ -16,7 +16,7 @@ export const AuthenticationMiddleware = async function (
         const token: string | undefined = req.header("Authentication");
         if (!token) return res.status(401).send({ error_en: "Access Denied!!" });
         //decoded Token And Find In Mongoo db By id Then CHeck If user Exist
-        const decoded: any = jwt.verify(token, process.env.JWT_KEY);
+        const decoded: any = jwt.verify(token, process.env.JWT_KEY!);
         const user = await User.findById(decoded._id);
         if (!user) return next("Invalid Token");
         // Set Current User To locals
