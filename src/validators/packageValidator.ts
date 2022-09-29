@@ -27,7 +27,11 @@ const validatePackage = (pack: any) => {
             post: (schema) => schema.required(),
             put: (schema) => schema.forbidden(),
         }),
-        price: Joi.number().integer().min(1).alter({
+        price_SR: Joi.number().integer().min(1).alter({
+            post: (schema) => schema.required(),
+            put: (schema) => schema.forbidden(),
+        }),
+        price_USD: Joi.number().integer().min(1).alter({
             post: (schema) => schema.required(),
             put: (schema) => schema.forbidden(),
         }),
