@@ -37,10 +37,12 @@ const SubscriptionSchema = new Schema<SubscriptionI>({
 });
 
 SubscriptionSchema.pre('save', async function (next) {
+    if(!this.isNew) return next();
     const {price_SR, price_USD, duration, sale} = (await this.populate<{package: PackageI}>('package', 'duration')).package;
     this.endDate = new Date(this.startDate.setMonth(this.startDate.getMonth() + duration));
     this.paid_SR = price_SR - sale * price_SR / 100;
     this.paid_USD = price_USD - sale * price_USD / 100;
+    next();
   });
 
 

@@ -12,7 +12,7 @@ const Packages = JSON.parse(fs.readFileSync('./packages.json', 'utf-8'));
 
 //  Pushing data to db
 const pushJsonData = async (data: any, collection: mongoose.Model<any>) => {
-    await collection.insertMany(data);
+    await collection.create(data);
 }
 
 //Delete all data

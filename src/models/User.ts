@@ -25,7 +25,7 @@ export interface UserI extends Document {
     company: ObjectId,
     branch: ObjectId,
     createToken: () => string,
-    isPasswordsMatched: () => Promise<boolean>
+    isPasswordsMatched: (enteredPassword: string) => Promise<boolean>
 }
 
 const UserSchema = new Schema<UserI, Model<UserI>>({
