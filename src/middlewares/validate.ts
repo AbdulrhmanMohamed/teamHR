@@ -1,8 +1,7 @@
 import { NextFunction, Request, Response } from "express";
-export const validator = (validator: any, mode: any) => {
+export const validator = (validator: any) => {
     return (req: Request, res: Response, next: NextFunction) => {
-        console.log(mode)
-        const { error } = validator(req.body, mode);
+        const { error } = validator(req.body);
         if (error) return res.status(400).send(error.details[0].message);
         next();
     }

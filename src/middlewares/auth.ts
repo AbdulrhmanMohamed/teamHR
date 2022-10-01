@@ -18,12 +18,13 @@ export const AuthenticationMiddleware = async function (
         //decoded Token And Find In Mongoo db By id Then CHeck If user Exist
         const decoded: any = jwt.verify(token, process.env.JWT_KEY!);
         const user = await User.findById(decoded._id);
-        if (!user) return next("Invalid Token");
+        console.log(user)
+        if (!user) return res.send("Invalid Token");
         // Set Current User To locals
         (req as AuthenticatedReq).user = user;
         // call next Middleware
         return next();
     } catch (ex) {
-        next("Invalid Token");
+        return res.send("Invalid Token!");
     }
 };

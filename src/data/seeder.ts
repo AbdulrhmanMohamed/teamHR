@@ -6,7 +6,7 @@ import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import path from 'path';
 import { Company } from '../models/Company';
-dotenv.config({ path: path.resolve(__dirname, '../config/development.env') });
+dotenv.config({ path: path.resolve(__dirname, `../config/development.env`) });
 
 const Users = JSON.parse(fs.readFileSync('./users.json', 'utf-8'));
 const Packages = JSON.parse(fs.readFileSync('./packages.json', 'utf-8'));
@@ -39,6 +39,7 @@ const removeAllData = async () => {
     try {
         await deleteAllModelData(User);
         await deleteAllModelData(Package);
+        await deleteAllModelData(Company);
         console.log(colors.bgRed.white.bold('all data is deleted'));
     } catch (err) {
         console.log(colors.bgRed.white.bold(`Error while deleteing data ${err}`));

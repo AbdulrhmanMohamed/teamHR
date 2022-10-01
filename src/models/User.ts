@@ -66,12 +66,12 @@ UserSchema.pre('save', async function (next) {
   
 //   Check if passwords are mathced
 
-UserSchema.methods.isPasswordMatched = async function (enteredPassword: string) {
+UserSchema.methods.isPasswordsMatched = async function (enteredPassword: string) {
     return await bcrypt.compare(enteredPassword, this.password);
   };
   
 UserSchema.methods.createToken = function () {
-    return jwt.sign({ id: this._id, email: this.email }, process.env.JWT_KEY!, {
+    return jwt.sign({ _id: this._id, email: this.email }, process.env.JWT_KEY!, {
       expiresIn: +process.env.JWT_AGE! / 1000,
     });
   };

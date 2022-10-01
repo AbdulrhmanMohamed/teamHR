@@ -21,13 +21,13 @@ subscriptionsRouter.route('/').all(
     checkRole(Roles.SUPER_ADMIN))
     .get(getAllsubscriptions)
     .post(
-    validator(validatePackage, "post"),
+    validator(validatePackage),
     createSubscription);
 
 subscriptionsRouter.route('/:id')
     .all(AuthenticationMiddleware)
     .get(checkRole(Roles.SUPER_ADMIN, Roles.ROOT), getSubscriptionById)
-    .put(checkRole(Roles.SUPER_ADMIN), validator(validatePackage, "put"), updateSubscription)
+    .put(checkRole(Roles.SUPER_ADMIN), validator(validatePackage), updateSubscription)
     .delete(checkRole(Roles.SUPER_ADMIN), deleteSubscription)
     .post(checkRole(Roles.SUPER_ADMIN, Roles.ROOT), activateSubscription)
 
