@@ -65,7 +65,8 @@ UserSchema.pre('save', async function (next) {
   });
   
 //   Check if passwords are mathced
-UserSchema.methods.isPasswordsMatched = async function (enteredPassword: string) {
+
+UserSchema.methods.isPasswordMatched = async function (enteredPassword: string) {
     return await bcrypt.compare(enteredPassword, this.password);
   };
   
@@ -74,7 +75,6 @@ UserSchema.methods.createToken = function () {
       expiresIn: +process.env.JWT_AGE! / 1000,
     });
   };
-
 const User = model<UserI>('User', UserSchema);
 
 export default User;

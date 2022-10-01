@@ -8,6 +8,8 @@ const server = http.createServer(app);
 //Connecting to database
 (async () => {
     try {
+        console.log(process.env.JWT_KEY!);
+
         await mongoose.connect(process.env.MONGO_URI!);
         server.listen(process.env.PORT || 5000);
         console.log("Connected to database successfully");

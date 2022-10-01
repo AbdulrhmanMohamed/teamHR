@@ -5,10 +5,12 @@ import Package from '../models/Packages';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import path from 'path';
-dotenv.config({ path: path.resolve(__dirname , '../config/development.env')});
+import { Company } from '../models/Company';
+dotenv.config({ path: path.resolve(__dirname, '../config/development.env') });
 
 const Users = JSON.parse(fs.readFileSync('./users.json', 'utf-8'));
 const Packages = JSON.parse(fs.readFileSync('./packages.json', 'utf-8'));
+const Companies = JSON.parse(fs.readFileSync('./companies.json', 'utf-8'));
 
 //  Pushing data to db
 const pushJsonData = async (data: any, collection: mongoose.Model<any>) => {
@@ -21,23 +23,24 @@ const deleteAllModelData = async (collection: mongoose.Model<any>) => {
 }
 
 const addAllData = async () => {
-    try{
+    try {
+        await pushJsonData(Companies, Company);
         await pushJsonData(Users, User);
         await pushJsonData(Packages, Package);
         console.log(colors.bgBlue.white.bold('all data is added'));
-    }catch(err){
-        console.log(`Error while seeding data ${err}` );
+    } catch (err) {
+        console.log(`Error while seeding data ${err}`);
         process.exit(1);
     }
-    
+
 };
 
 const removeAllData = async () => {
-    try{
+    try {
         await deleteAllModelData(User);
         await deleteAllModelData(Package);
         console.log(colors.bgRed.white.bold('all data is deleted'));
-    }catch(err){
+    } catch (err) {
         console.log(colors.bgRed.white.bold(`Error while deleteing data ${err}`));
         process.exit(1);
     }
@@ -45,17 +48,17 @@ const removeAllData = async () => {
 
 (async () => {
     const operation = process.argv[2];
-    try{
-        if(operation === 'i'){
+    try {
+        if (operation === 'i') {
             await mongoose.connect(process.env.MONGO_URI!);
             await addAllData();
         }
-        if(operation === 'd'){
+        if (operation === 'd') {
             await mongoose.connect(process.env.MONGO_URI!);
             await removeAllData();
         }
         process.exit(0);
-    }catch(err){
+    } catch (err) {
         console.log(err);
         process.exit(1);
     }

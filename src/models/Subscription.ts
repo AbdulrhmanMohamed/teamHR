@@ -1,7 +1,7 @@
 import mongoose, { Schema, model, ObjectId } from "mongoose";
 import { PackageI } from "./Packages";
 
-export interface SubscriptionI{
+export interface SubscriptionI {
     startDate: Date,
     endDate: Date,
     isExpired: boolean,
@@ -9,7 +9,7 @@ export interface SubscriptionI{
     subscriber: ObjectId,
     package: ObjectId,
     paid_SR: number,
-    paid_USD: number
+    paid_USD: number,
 }
 
 
@@ -29,7 +29,7 @@ const SubscriptionSchema = new Schema<SubscriptionI>({
         default: true,
     },
     isExpired: {
-        type: Boolean, 
+        type: Boolean,
         default: false
     },
     paid_SR: Number,
