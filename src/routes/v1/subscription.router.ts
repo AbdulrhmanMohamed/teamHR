@@ -16,13 +16,9 @@ import validatePackage from "../../validators/packageValidator";
 
 const subscriptionsRouter = Router();
 
-<<<<<<< HEAD
-packageRouter.route('/').all(AuthenticationMiddleware,checkRole(Roles.SUPER_ADMIN))
-=======
 subscriptionsRouter.route('/').all(
     AuthenticationMiddleware,
     checkRole(Roles.SUPER_ADMIN))
->>>>>>> de4a296a6093b99a6508584db09e26a20b35a7a8
     .get(getAllsubscriptions)
     .post(
     validator(validatePackage, "post"),

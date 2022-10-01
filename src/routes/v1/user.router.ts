@@ -54,12 +54,6 @@ userRouter.route('/roots')
     .post(checkRole(Roles.ADMIN, Roles.ROOT), validator(validateUser, "post"), createRoot);
 
 userRouter.route('/roots/:id')
-<<<<<<< HEAD
-    .all(AuthenticationMiddleware, checkRole(Roles.ADMIN, Roles.ROOT, Roles.EMPLOYEE))
-    .get(getRoot);
-
-export default userRouter
-=======
     .all(AuthenticationMiddleware)
     .get(getRoot, checkRole(Roles.ADMIN, Roles.ROOT, Roles.EMPLOYEE))
     .all(checkRole(Roles.SUPER_ADMIN), checkUpdatePrivilage,)
@@ -67,4 +61,3 @@ export default userRouter
     .delete(deleteRoot);
 
 export default userRouter;
->>>>>>> de4a296a6093b99a6508584db09e26a20b35a7a8
