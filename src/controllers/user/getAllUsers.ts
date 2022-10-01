@@ -3,7 +3,7 @@ import User from "../../models/User";
 import { AuthenticatedReq } from "../../middlewares/auth";
 
 //@desc         get all superadmins
-//@route        GET /api/v1/superadmins
+//@route        GET /api/v1/users/superadmins
 //@access       private(super admins)
 export const getAllSuperAdmins = async (req: AuthenticatedReq, res:Response, next:NextFunction) => {
     const allSupervisors = await User.find({role: 'super admin'});
@@ -15,7 +15,7 @@ export const getAllSuperAdmins = async (req: AuthenticatedReq, res:Response, nex
 };
 
 //@desc         get all roots
-//@route        GET /api/v1/roots
+//@route        GET /api/v1/users/roots
 //@access       private(super admins)
 export const getAllRoots = async (req: AuthenticatedReq, res:Response, next:NextFunction) => {
     const allRoots = await User.find({role: 'root'});
@@ -27,7 +27,7 @@ export const getAllRoots = async (req: AuthenticatedReq, res:Response, next:Next
 };
 
 //@desc         get all admins
-//@route        GET /api/v1/admins
+//@route        GET /api/v1/users/admins
 //@access       private(admin, root)
 export const getAllAdmins = async (req: AuthenticatedReq, res:Response, next:NextFunction) => {
     const allAdmins = await User.find({role: 'admin', company: req.user!.company});
@@ -39,7 +39,7 @@ export const getAllAdmins = async (req: AuthenticatedReq, res:Response, next:Nex
 };
 
 //@desc         get all employees
-//@route        GET /api/v1/users
+//@route        GET /api/v1/users/employyes
 //@access       private(admin, root, employee)
 export const getAllEmployees = async (req: AuthenticatedReq, res:Response, next:NextFunction) => {
     const allEmployees = await User.find({role: 'employee', company: req.user!.company});

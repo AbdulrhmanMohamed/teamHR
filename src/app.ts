@@ -3,8 +3,12 @@ import cors from 'cors';
 import morgan from 'morgan';
 import dotenv from 'dotenv';
 import path from 'path';
-import Joi from "joi";
 import bodyParser from "body-parser"
+import Joi from "joi";
+import userRouter from './routes/v1/user.router';
+import packageRouter from './routes/v1/package.router';
+import subscriptionsRouter from './routes/v1/subscription.router';
+
 Joi.objectId = require('joi-objectid')(Joi);
 import user from "./routes/v1/user.router"
 import packages from "./routes/v1/package.router"
@@ -19,11 +23,13 @@ dotenv.config({ path: path.resolve(__dirname + `/config/${process.env.NODE_ENV}.
 app.use(cors())
     .use(express.json())
     .use(bodyParser.urlencoded({ extended: false }))
+// Routes
+app.use('/api/v1/users/', userRouter)
+    .use('/api/v1/packages/', packageRouter)
+    .use('/api/v1/subscriptions/', subscriptionsRouter)
     .use('/api/v1/users', user)
-    .use('/api/v1/packages',packages)
-    .use('/api/v1/subscription',subscription)
-    .use('/api/v1/company',company)
+    .use('/api/v1/company', company)
 
-    .all('*', (req, res) => res.status(404).json({ message: "Undefinded Routes" }));
+app.all('*', (req, res) => res.status(404).json({ message: "Undefinded Routes" }));
 
 export default app;

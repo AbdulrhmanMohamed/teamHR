@@ -2,9 +2,10 @@ import { NextFunction, Request, Response } from "express";
 import User from "../../models/User";
 import { AuthenticatedReq } from "../../middlewares/auth";
 import { Roles } from "../../types/enums";
+import { Company } from "../../models/Company";
 
 //@desc         create superadmin
-//@route        POST /api/v1/superadmins
+//@route        POST /api/v1/users/superadmins
 //@access       private(super admins)
 export const createSuperAdmin = async (req: AuthenticatedReq, res:Response, next:NextFunction) => {
     const createdUser = await User.create({...req.body, role: Roles.SUPER_ADMIN});
@@ -17,7 +18,7 @@ export const createSuperAdmin = async (req: AuthenticatedReq, res:Response, next
 };
 
 //@desc         create root
-//@route        POST /api/v1/roots
+//@route        POST /api/v1/users/roots
 //@access       private(super admins)
 export const createRoot = async (req: AuthenticatedReq, res:Response, next:NextFunction) => {
     const createdUser = await User.create({...req.body, role: Roles.ROOT});
@@ -31,26 +32,26 @@ export const createRoot = async (req: AuthenticatedReq, res:Response, next:NextF
 };
 
 //@desc         get all admins
-//@route        GET /api/v1/admins
+//@route        GET /api/v1/users/admins
 //@access       private(admin, root)
-export const getAllAdmins = async (req: AuthenticatedReq, res:Response, next:NextFunction) => {
-    const allAdmins = await User.find({role: 'admin', company: req.user!.company});
-    return res.send({
+export const createAdmin = async (req: AuthenticatedReq, res:Response, next:NextFunction) => {
+    const admin = await User.create({...req.body, role: Roles.ADMIN});
+    return res.status(201).send({
         success: true,
-        data: allAdmins,
-        message: 'Users are fetched successfully',
+        data: admin,
+        message: 'admin is created successfully',
     });
 };
 
 //@desc         get all employees
-//@route        GET /api/v1/users
-//@access       private(admin, root, employee)
-export const getAllEmployees = async (req: AuthenticatedReq, res:Response, next:NextFunction) => {
-    const allEmployees = await User.find({role: 'employee', company: req.user!.company});
-    return res.send({
+//@route        GET /api/v1/users/employees
+//@access       private(admin, root)
+export const createEmployee = async (req: AuthenticatedReq, res:Response, next:NextFunction) => {
+    const employee = await User.create({...req.body, role: Roles.EMPLOYEE});
+    return res.status(201).send({
         success: true,
-        data: allEmployees,
-        message: 'Users are fetched successfully'
+        data: employee,
+        message: 'employee is created successfully',
     });
 };
 
