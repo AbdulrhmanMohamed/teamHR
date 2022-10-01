@@ -7,6 +7,8 @@ export interface PackageI{
     sale: number,
     maxCompaniesAllowed: number,
     maxEmployeesAllowed: number
+    price_SR: number,
+    price_USD: number,
 }
 
 const PackageSchema = new Schema<PackageI>({
@@ -15,7 +17,9 @@ const PackageSchema = new Schema<PackageI>({
     duration: Number,
     sale: Number,
     maxCompaniesAllowed: Number,
-    maxEmployeesAllowed: Number
+    maxEmployeesAllowed: Number,
+    price_SR: Number,
+    price_USD: Number,
 }, {timestamps: true});
 
 const Package = model<PackageI>('Package', PackageSchema);

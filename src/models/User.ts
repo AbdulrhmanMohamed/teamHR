@@ -1,9 +1,9 @@
-import mongoose, { ObjectId, Schema, model, Callback } from 'mongoose';
+import mongoose, { ObjectId, Schema, model, Model, Document } from 'mongoose';
 import {  MartialStatusEnum, Roles } from '../types/enums';
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken';
 
-export interface UserI{
+export interface UserI extends Document {
     fullName_ar: string,
     fullName_en: string,
     userName_ar: string,
@@ -24,9 +24,11 @@ export interface UserI{
     department: ObjectId,
     company: ObjectId,
     branch: ObjectId,
+    createToken: () => string,
+    isPasswordsMatched: () => Promise<boolean>
 }
 
-const UserSchema = new Schema<UserI>({
+const UserSchema = new Schema<UserI, Model<UserI>>({
     fullName_ar: String,
     fullName_en: String,
     userName_ar: String,

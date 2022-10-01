@@ -3,7 +3,7 @@ import { ObjectId } from "mongodb";
 // const { days } = require('../data/enums');
 // const { BranchShift } = require('./DayShift');
 export const branchSchema = new Schema({
-    branch_name: {
+    name: {
         type: String,
         required: true,
         minlength: 5,

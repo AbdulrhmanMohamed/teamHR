@@ -1,6 +1,10 @@
-import mongoose, { Schema} from "mongoose";
+import mongoose, { Schema } from "mongoose";
 import { ObjectId } from "mongodb";
-const schema = new Schema({
+export interface ICompany {
+    name: String,
+    owner: ObjectId
+}
+const schema = new Schema<ICompany>({
     name: {
         type: String,
         required: true,
@@ -13,5 +17,5 @@ const schema = new Schema({
     },
 
 }, { timestamps: true })
-export const Company = mongoose.model('company', schema);
+export const Company = mongoose.model<ICompany>('company', schema);
 
