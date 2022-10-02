@@ -1,4 +1,4 @@
-import express from 'express';
+import express,{Request,Response} from 'express';
 import cors from 'cors';
 import morgan from 'morgan';
 import dotenv from 'dotenv';
@@ -28,6 +28,6 @@ app.use('/api/v1/packages/', packageRouter);
 app.use('/api/v1/subscriptions/', subscriptionsRouter);
 app.use('/api/v1/companies/', company);
 
-app.all('*', (req, res) => res.status(404).json({ message: "Undefinded Routes" }));
+app.all('*', (req:Request, res:Response) => res.status(404).send({ message: "Undefinded Routes" }));
 
 export default app;

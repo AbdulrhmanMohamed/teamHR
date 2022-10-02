@@ -15,7 +15,7 @@ const server = http.createServer(app);
         console.log("Connected to database successfully");
         console.log("Server is running on port " + process.env.PORT);
     } catch (err) {
-        console.log("Error on DB Connecting: " + (err as Error).message);
+        console.log("Error on DB Connecting: " + (err as any).message);
         process.exit(1);
     }
 })();
