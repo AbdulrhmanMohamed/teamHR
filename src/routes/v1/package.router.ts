@@ -12,14 +12,14 @@ packageRouter.route('/')
     .get(getAllPackages)
     .post(AuthenticationMiddleware,
             checkRole(Roles.SUPER_ADMIN),
-            validator(validatePackage),
+            validator(validatePackage,"post"),
             createPackage);
 
 packageRouter.route('/:id')
     .get(getPackageById)
     .all(AuthenticationMiddleware,
         checkRole(Roles.SUPER_ADMIN))
-    .put(validator(validatePackage), updatePackage)
+    .put(validator(validatePackage,"put"), updatePackage)
     .delete(deletePackage);
 
 export default packageRouter;

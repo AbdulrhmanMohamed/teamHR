@@ -16,49 +16,49 @@ const userRouter = Router();
 userRouter.route('/employees')
     .all(AuthenticationMiddleware)
     .get(checkRole(Roles.ADMIN, Roles.ROOT, Roles.EMPLOYEE), getAllEmployees)
-    .post(checkRole(Roles.ROOT, Roles.ADMIN), checkUserFound,validator(validateUserPost), checkCreationPrivilage, createEmployee);
+    .post(checkRole(Roles.ROOT, Roles.ADMIN), checkUserFound,validator(validateUserPost,"post"), checkCreationPrivilage, createEmployee);
     
 userRouter.route('/employees/:id')
     .all(AuthenticationMiddleware)
     .get(checkRole(Roles.ADMIN, Roles.ROOT, Roles.EMPLOYEE), getEmployee)
     .all(checkRole(Roles.ROOT, Roles.ADMIN), checkUpdatePrivilage)
-    .patch(validator(validateUserPut), checkUserFound, updateEmployee)
+    .patch(validator(validateUserPut,"put"), checkUserFound, updateEmployee)
     .delete(deleteEmployee);
 
 userRouter.route('/superadmins')
     .all(AuthenticationMiddleware, checkRole(Roles.SUPER_ADMIN))
     .get(getAllSuperAdmins)
-    .post(validator(validateUserPost), checkUserFound, createSuperAdmin);
+    .post(validator(validateUserPost,"post"), checkUserFound, createSuperAdmin);
 
 userRouter.route('/superadmins/:id')
     .all(AuthenticationMiddleware, checkRole(Roles.SUPER_ADMIN))
     .get(getEmployee)
     .all(checkUpdatePrivilage)
-    .patch(validator(validateUserPut), checkUserFound, updateSuperAdmin)
+    .patch(validator(validateUserPut,"put"), checkUserFound, updateSuperAdmin)
     .delete(deleteSuperAdmin);
 
 userRouter.route('/admins')
     .all(AuthenticationMiddleware)
     .get(checkRole(Roles.ADMIN, Roles.ROOT, Roles.EMPLOYEE), getAllAdmins)
-    .post(checkRole(Roles.ADMIN, Roles.ROOT), validator(validateUserPost), checkUserFound, checkCreationPrivilage, createAdmin);
+    .post(checkRole(Roles.ADMIN, Roles.ROOT), validator(validateUserPost,"post"), checkUserFound, checkCreationPrivilage, createAdmin);
 
 userRouter.route('/admins/:id')
     .all(AuthenticationMiddleware)
     .get(checkRole(Roles.ADMIN, Roles.ROOT, Roles.EMPLOYEE), getAdmin)
     .all(checkRole(Roles.ADMIN, Roles.ROOT), checkUpdatePrivilage)
-    .patch(validator(validateUserPut), checkUserFound, updateAdmin)
+    .patch(validator(validateUserPut,"put"), checkUserFound, updateAdmin)
     .delete(deleteAdmin);
 
 userRouter.route('/roots')
     .all(AuthenticationMiddleware)
     .get(getAllRoots)
-    .post(checkRole(Roles.ADMIN, Roles.ROOT), checkUserFound, validator(validateUserPost), createRoot);
+    .post(checkRole(Roles.ADMIN, Roles.ROOT), checkUserFound, validator(validateUserPost,"post"), createRoot);
 
 userRouter.route('/roots/:id')
     .all(AuthenticationMiddleware)
     .get(getRoot, checkRole(Roles.ADMIN, Roles.ROOT, Roles.EMPLOYEE))
     .all(checkRole(Roles.SUPER_ADMIN), checkUpdatePrivilage)
-    .patch(validator(validateUserPut), checkUserFound, updateRoot)
+    .patch(validator(validateUserPut,"put"), checkUserFound, updateRoot)
     .delete(deleteRoot);
 
 export default userRouter;
