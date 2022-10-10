@@ -1,6 +1,7 @@
 import { Ibreak } from './../../models/Break';
 import { Response, Request, NextFunction } from "express";
 import { Break } from "../../models/Break";
+import User from '../../models/User';
 //@desc         create a breakTime
 //@route        POST /api/v1/break
 //@access       private(root,admin)
@@ -9,16 +10,28 @@ export const addBreak = async (req: Request, res: Response) => {
     res.send({
         success: true,
         data: brea,
-        message_en: 'break is created successfully'
+        message_en: 'Break is created successfully'
     })
 };
+//@desc         get all breaks in shift
+//@route        GET /api/v1/break/:shift
+//@access       private(root,admin)
+export const getAllBreaks = async (req: Request, res: Response) => {
+    const bks = await Break.find({ shift: req.params.shift })
+    if (!bks) return res.status(400).send({ error_en: "Invalid shift !! , can't get the breaks from the shift " })
+    res.send({
+        success: true,
+        data: bks,
+        message_en: 'Breaks are fetched successfully'
+    })
+}
 //@desc         update a breakTime
-//@route        POST /api/v1/break/:shift/:id
+//@route        PUT /api/v1/break/:shift/:id
 //@access       private(root,admin)
 export const updateBreak = async (req: Request, res: Response) => {
     const { start, end, duration, isOpen } = req.body
     const bk = await Break.findOne({ shift: req.params.shift, _id: req.params.shift })
-    if (!bk) return res.status(400).send({ error_en: "Invaild break !!" })
+    if (!bk) return res.status(400).send({ error_en: "Invalid break !!" })
     // if want just update the start and the end for break 
     if (!isOpen && !bk.isOpen) {
         await Break.updateOne({ shift: req.params.shift, _id: req.params.shift }, {
@@ -81,17 +94,79 @@ export const updateBreak = async (req: Request, res: Response) => {
     res.send({
         success: true,
         data: newBk,
-        message_en: 'break is update successfully'
+        message_en: 'Break is update successfully'
     })
 }
-export const getAllBreaks = async (req: Request, res: Response) => {
-    const bks = await Break.find({ shift: req.params.shift })
-    if (!bks) return res.status(400).send({ error_en: "Invalid shift !! , can't get the breaks from the shift " })
-}
-//@desc         get all breaks in shift
-//@route        GET /api/v1/break/:shift
-//@access       private(root,admin)
-
 //@desc         get a breaks in shift
 //@route        GET /api/v1/break/:shift/:id
 //@access       private(root,admin)
+export const getBreakById = async (req: Request, res: Response) => {
+    const bk: any = await Break.findOne({ shift: req.params.shift, _id: req.params.shift })
+    if (!bk) return res.status(400).send({ error_en: "Invalid break !!" })
+    res.send({
+        success: true,
+        data: bk,
+        message_en: 'Break is fetched successfully'
+    })
+}
+//@desc         delete a break in shift
+//@route        DELETE /api/v1/break/:shift/:id
+//@access       private(root,admin)
+export const deleteBreakById = async (req: Request, res: Response) => {
+    const bk: any = await Break.findOne({ shift: req.params.shift, _id: req.params.shift })
+    if (!bk) return res.status(400).send({ error_en: "Invalid break !!" })
+    await Break.deleteOne({ shift: req.params.shift, _id: req.params.shift })
+    res.send({
+        success: true,
+        message_en: 'Break is deleted successfully'
+    })
+}
+//@desc         Assign user to Break
+//@route        POST /api/v1/break/assign/:shift/:id
+//@access       private(root,admin)
+export const assignUser = async (req: Request, res: Response) => {
+    const userId = req.body.userId;
+    let user;
+    if (userId) user = await User.findById(userId);
+    if (!user) return res.status(400).send("User you are trying to assing to is not available");
+    const breakv = await Break.findById({ shift: req.params.shift, _id: req.params.id });
+    if (!breakv) return res.status(400).send("Create break shift first");
+    const assignedBreak = await Break.findOne({
+        users: { $elemMatch: { $eq: userId } },
+        $or: [
+            { $and: [{ start: { $gte: breakv.start } }, { end: { $lte: breakv.end } }] },
+            { $and: [{ start: { $lte: breakv.start } }, { end: { $gte: breakv.end } }] },
+            { $and: [{ start: { $lte: breakv.start } }, { end: { $gt: breakv.start } }] },
+            { $and: [{ start: { $lt: breakv.end } }, { end: { $gte: breakv.end } }] },
+        ]
+    });
+    const assignedBreakOpen = await Break.findOne({
+        isOpen: true,
+        users: { $elemMatch: { $eq: userId } },
+    });
+    if (assignedBreak || assignedBreakOpen) return res.status(400).send("user is already signed in another break in the selected time'");
+    const brea = await Break.findByIdAndUpdate({ shift: req.params.shift, _id: req.params.id }, { $push: { users: userId } }, { new: true });
+    res.send({
+        success: true,
+        date: brea,
+        message_en: 'User is assign to break successfully'
+    })
+
+};
+//@desc         Unassign user from Break
+//@route        POST /api/v1/break/unassign/:shift/:id
+//@access       private(root,admin)
+export const unassignUser = async (req: Request, res: Response) => {
+    const userId = req.body.userId;
+    let user;
+    if (userId) user = await User.findById(userId);
+    if (!user) return res.status(400).send("User you are trying to unassign to is not available");
+    const brea = await Break.findByIdAndUpdate(req.params.id, { $pull: { users: userId } }, { new: true });
+    if (!brea) return res.status(400).send("Create Break shift first");
+    res.send({
+        success: true,
+        date: brea,
+        message_en: 'User is unassign from break successfully'
+    })
+}
+

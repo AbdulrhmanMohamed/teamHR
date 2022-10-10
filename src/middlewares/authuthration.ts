@@ -21,16 +21,16 @@ export const AuthuthrationMiddleware = (type: string) => async function (
         const companyValid = await Company.findOne({ owner: owner, _id: company })
         if (!companyValid) return res.status(401).send({ error_en: "You cannot (add or update or get) any branch in this company because you are not the owner of the company" })
     }
-    else if (type === "departement") {
-        if (companiesId.includes(branch.company.toString())) return res.status(401).send({ error_en: "You cannot (add or update or get) any department in this branch because you are not the owner of the company has this branch" })
+    else if (type === "departement" || type === "shift") {
+        if (!companiesId.includes(branch.company.toString())) return res.status(401).send({ error_en: `You cannot (add or update or get) any ${type} in this branch because you are not the owner of the company has this branch` })
     }
-    else if (type === "shift") {
-        if (!companiesId.includes(branch.company.toString())) return res.status(401).send({ error_en: "You cannot (add or update or get) any shift in this branch because you are not the owner of the company has this branch" })
-    }
-    else if (type == "hr") {
+    // else if () {
+    //     if (!companiesId.includes(branch.company.toString())) return res.status(401).send({ error_en: "You cannot (add or update or get) any shift in this branch because you are not the owner of the company has this branch" })
+    // }
+    else if (type == "admin") {
 
     }
-    else if (type === "employ") {
+    else if (type === "employee") {
 
     }
     else if (type === "break") {
