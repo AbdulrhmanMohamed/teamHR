@@ -28,7 +28,7 @@ export interface UserI extends Document {
     isPasswordsMatched: (enteredPassword: string) => Promise<boolean>
 }
 
-const UserSchema = new Schema<UserI, Model<UserI>>({
+const UserSchema = new Schema<any>({
     fullName_ar: String,
     fullName_en: String,
     userName_ar: String,
@@ -37,7 +37,10 @@ const UserSchema = new Schema<UserI, Model<UserI>>({
     position: String,
     email: String,
     password: String,
-    role: String,
+    role:{
+      type:String,
+      default:"user"
+    },
     residencyExpiration: Date,
     nationality: String,
     phone: String,

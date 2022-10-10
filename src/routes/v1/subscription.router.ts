@@ -24,16 +24,16 @@ subscriptionsRouter.route('/').all(
     validator(validatePackage,"post"),
     createSubscription);
 
-subscriptionsRouter.route('/:id')
+subscriptionsRouter.route('/updates/:id')
     .all(AuthenticationMiddleware)
     .get(checkRole(Roles.SUPER_ADMIN, Roles.ROOT), getSubscriptionById)
     .put(checkRole(Roles.SUPER_ADMIN), validator(validatePackage,"put"), updateSubscription)
     .delete(checkRole(Roles.SUPER_ADMIN), deleteSubscription)
     .post(checkRole(Roles.SUPER_ADMIN, Roles.ROOT), activateSubscription)
 
-subscriptionsRouter.route('/user/:id').post(
+subscriptionsRouter.route('/buy').post(
     AuthenticationMiddleware, 
-    checkRole(Roles.SUPER_ADMIN, Roles.ROOT),
+    checkRole(Roles.USER, Roles.SUPER_ADMIN),
     buySubscription
     )
 

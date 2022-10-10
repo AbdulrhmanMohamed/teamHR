@@ -1,4 +1,4 @@
-import express,{Request,Response} from 'express';
+import express, { Request, Response } from 'express';
 import cors from 'cors';
 import morgan from 'morgan';
 import dotenv from 'dotenv';
@@ -9,6 +9,9 @@ import userRouter from './routes/v1/user.router';
 import packageRouter from './routes/v1/package.router';
 import subscriptionsRouter from './routes/v1/subscription.router';
 import authRouter from './routes/v1/auth.router';
+import branch from './routes/v1/branch.router';
+import department from './routes/v1/department.router';
+import shift from './routes/v1/shift.router';
 
 Joi.objectId = require('joi-objectid')(Joi);
 import company from "./routes/v1/company.router"
@@ -22,12 +25,14 @@ app.use(cors())
     .use(express.json())
     .use(bodyParser.urlencoded({ extended: false }))
 // Routes
-app.use('/api/v1/auth/', authRouter);
-app.use('/api/v1/users/', userRouter);
-app.use('/api/v1/packages/', packageRouter);
-app.use('/api/v1/subscriptions/', subscriptionsRouter);
-app.use('/api/v1/companies/', company);
-
-app.all('*', (req:Request, res:Response) => res.status(404).send({ message: "Undefinded Routes" }));
+app.use('/teamHR/api/v1/auth/', authRouter)
+    .use('/teamHR/api/v1/user/', userRouter)
+    .use('/teamHR/api/v1/package/', packageRouter)
+    .use('/teamHR/api/v1/subscription/', subscriptionsRouter)
+    .use('/teamHR/api/v1/company/', company)
+    .use('/teamHR/api/v1/branch/', branch)
+    .use('/teamHR/api/v1/department/', department)
+    .use('/teamHR/api/v1/shift/', shift)
+    .all('*', (req: Request, res: Response) => res.status(404).send({ message: "Undefinded Routes" }));
 
 export default app;

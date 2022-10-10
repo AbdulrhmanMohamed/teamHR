@@ -13,6 +13,7 @@ export enum Roles {
     ROOT = "root",
     ADMIN = "admin",
     EMPLOYEE = "employee",
+    USER = "user",
 }
 export const nationalities = [
     'Afghan',
@@ -210,3 +211,4 @@ export const nationalities = [
     'Zimbabwean'
 ];
 export const days = [0, 1, 2, 3, 4, 5, 6]
+export const TypeShift = ['day','month','year','week']

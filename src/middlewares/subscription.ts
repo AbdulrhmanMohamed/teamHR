@@ -17,6 +17,6 @@ export const checkSubscripe = async (req: AuthenticatedReq, res: Response, next:
         root = company!.owner
     }
     let subscribe = await Subscription.findOne({ subscriber: root })
-    if (subscribe && subscribe!.endDate < new Date(Date.now()) && subscribe!.isExpired) return res.status(403).send('Access Forbidden!!');
+    if (subscribe && (subscribe!.endDate < new Date(Date.now()) || subscribe!.isExpired)) return res.status(403).send('Access Forbidden!!');
     next();
 }

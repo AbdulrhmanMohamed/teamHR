@@ -6,7 +6,7 @@ export const branchSchema = new Schema({
     name: {
         type: String,
         required: true,
-        minlength: 5,
+        minlength: 2,
         maxlength: 255
     },
     location: {
@@ -18,10 +18,6 @@ export const branchSchema = new Schema({
         required: true,
         ref: 'Company'
     },
-    // shifts: [{
-    //     work: BranchShift,
-    // }],
-    weeklyHolidays: [Number],
     fixedHolidays: [Date]
 
 }, { timestamps: true });

@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { AuthenticatedReq } from "../../middlewares/auth";
 import Subscription from "../../models/Subscription";
+import User from "../../models/User";
 import { Roles } from "../../types/enums";
 
 //@desc         get all subscription
@@ -19,7 +20,7 @@ export const getAllsubscriptions = async (req: AuthenticatedReq, res: Response, 
 //@route        GET /api/v1/subscriptions/:id
 //@access       private(super admin, Root)
 export const getSubscriptionById = async (req: AuthenticatedReq, res: Response, next: NextFunction) => {
-    if(req.user!.role === Roles.ROOT && req.user!._id !== req.params.id) return res.status(401).send({
+    if (req.user!.role === Roles.ROOT && req.user!._id !== req.params.id) return res.status(401).send({
         success: false,
         message: 'user not allowed',
     });
@@ -69,12 +70,12 @@ export const deleteSubscription = async (req: AuthenticatedReq, res: Response, n
 //@desc         get subscribtion of a user
 //@route        get /api/v1/subscriptions/user/:id
 //@access       private(super admin, Root)
-export const getUserSubscriptions = async (req: AuthenticatedReq, res: Response, next: NextFunction) => { 
-    if(req.user!.role === Roles.ROOT && req.user!._id !== req.params.id) return res.status(401).send({
+export const getUserSubscriptions = async (req: AuthenticatedReq, res: Response, next: NextFunction) => {
+    if (req.user!.role === Roles.ROOT && req.user!._id !== req.params.id) return res.status(401).send({
         success: false,
         message: 'user not allowed',
     });
-    const userSubscriptions = await Subscription.find({subscriber: req.params.id});
+    const userSubscriptions = await Subscription.find({ subscriber: req.params.id });
     res.send({
         success: true,
         message: 'user subscriptions are fetched successfully',
@@ -85,8 +86,20 @@ export const getUserSubscriptions = async (req: AuthenticatedReq, res: Response,
 //@desc         root subscribes to a package
 //@route        POST /api/v1/subscriptions/user/:id
 //@access       private(Root)
-export const buySubscription = async (req: AuthenticatedReq, res: Response, next: NextFunction) => { 
-    const userSubscriptions = await Subscription.create({...req.body, subscriber: req.user?._id});
+export const buySubscription = async (req: AuthenticatedReq, res: Response, next: NextFunction) => {
+    //EXTRA VALIDATE
+    const subscripe = await Subscription.findOne({ subscriber: req.user?._id, isExpired: false })    
+    if (subscripe) return res.status(400).send({ error_en: "You already took a bouquet" })
+    const userSubscriptions = new Subscription({
+        subscriber: req.user?._id,
+        package: req.body.package
+    })
+    await User.updateOne({ _id: req.user?._id }, {
+        $set: {
+            role: "root"
+        }
+    })
+    userSubscriptions.save()
     // Payment logic will be implemented here
     res.status(201).send({
         success: true,
@@ -98,14 +111,14 @@ export const buySubscription = async (req: AuthenticatedReq, res: Response, next
 //@desc         activate subscription
 //@route        POST /api/v1/subscriptions/:id
 //@access       private(super admin, Root)
-export const activateSubscription = async (req: AuthenticatedReq, res: Response, next: NextFunction) => { 
+export const activateSubscription = async (req: AuthenticatedReq, res: Response, next: NextFunction) => {
     const subscription = await Subscription.findById(req.params.id);
     // Not found subscription
-    if(subscription === null) return res.status(404).send({
+    if (subscription === null) return res.status(404).send({
         success: false, message: 'subscription not found'
     });
     // not user's subscription
-    if(req.user!.role === Roles.ROOT && req.user!._id !== subscription.subscriber) return res.status(401).send({
+    if (req.user!.role === Roles.ROOT && req.user!._id !== subscription.subscriber) return res.status(401).send({
         success: false,
         message: 'user not allowed',
     });
@@ -113,7 +126,7 @@ export const activateSubscription = async (req: AuthenticatedReq, res: Response,
     subscription.isActive = true;
     await subscription.save();
     // make the rest of user's subscriptions inactive
-    await Subscription.updateMany({subscriber: req.user!._id}, {$set: {isActive: false}});
+    await Subscription.updateMany({ subscriber: req.user!._id }, { $set: { isActive: false } });
 
     res.send({
         success: true,

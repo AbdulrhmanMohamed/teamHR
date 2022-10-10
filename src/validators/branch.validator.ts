@@ -13,19 +13,18 @@ export function validateBranch(branch: any) {
         end_mins: Joi.number().min(0).max(59).default(0),
     });
     const schema = Joi.object({
-        branch_name: Joi.string().min(5).max(255),
-        company: Joi.objectId(),
+        name: Joi.string().min(2).max(255).required(),
+        company: Joi.objectId().required(),
         // shifts: Joi.array().items({
         //     work: shiftSchema,
         //     breaks: Joi.array().items(shiftSchema),
         //     overtimes: Joi.array().items(shiftSchema),
         // }),
-         weeklyHolidays: Joi.array().items(Joi.number().valid(...days)),
+        weeklyHolidays: Joi.array().items(Joi.number().valid(...days)),
         fixedHolidays: Joi.array().items(Joi.date()),
-        location: Joi.object({
-            lat: Joi.number().required(),
-            long: Joi.number().required()
-        }).required()
+        lat: Joi.number().required(),
+        long: Joi.number().required()
+
     });
     const result = schema.validate(branch);
     return result;
