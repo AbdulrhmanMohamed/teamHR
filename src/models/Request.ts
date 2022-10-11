@@ -6,15 +6,16 @@ export interface IRequest {
     description: String,
     from: mongoose.Schema.Types.ObjectId,
     to: [mongoose.Schema.Types.ObjectId]
-    startTime: Date,
-    endTime: Date,
+    startDate: Date,
+    endDate: Date,
+    status: Boolean
 }
 
 const requestSchema = new Schema<IRequest>({
     title: {
-        type: String,
-        required: true,
-
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "SubCategory",
+        required: true
     },
     description: {
         type: String,
@@ -30,26 +31,28 @@ const requestSchema = new Schema<IRequest>({
         ref: 'User',
         required: true
     }],
-    startTime: {
+    startDate: {
         type: Date
     },
-    endTime: {
+    endDate: {
         type: Date,
-    }
+    },
+    status: Boolean
 
-})
+}, { timestamps: true })
 const Request = mongoose.model<IRequest>('Request', requestSchema)
 export default Request;
 
 
 export const validateRequest = (request: IRequest) => {
     const schema = Joi.object({
-        title: Joi.string().required(),
+        title: Joi.objectId().required(),
         description: Joi.string().required(),
         from: Joi.objectId().required(),
         to: Joi.array().items(Joi.objectId().required()).required(),
         startDate: Joi.date(),
         endDate: Joi.date(),
+        status: Joi.boolean().required()
 
     })
     return schema.validate(request)

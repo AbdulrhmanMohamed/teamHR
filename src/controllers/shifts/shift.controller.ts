@@ -1,6 +1,7 @@
 import { Shift, IShift } from './../../models/Shift';
 import { NextFunction, Request, Response } from "express";
 import { AuthenticatedReq } from "../../middlewares/auth";
+import { nameDays } from '../../types/enums';
 //@desc         create a shift
 //@route        POST /api/v1/shift
 //@access       private(root,admin)
@@ -107,5 +108,77 @@ export const getShift = async (req: AuthenticatedReq, res: Response) => {
         success: true,
         data: shift,
         message_en: 'Shift is fetched successfully'
+    })
+}
+//@desc         add weeklyHolidays in shift
+//@route        POST /api/v1/shift/holidays/:branch/:name
+//@access       private(root,admin)
+export const addHolidays = async (req: AuthenticatedReq, res: Response, next: NextFunction) => {
+    const branchId = req.params.branch
+    const nameShift = req.params.name
+    const { weeklyHolidays } = req.body
+    // if the shift invaild
+    const shift = await Shift.findOne({ branch: branchId, name: nameShift })
+    if (!shift) return res.status(400).send({ error_en: "Invaild shift !!" })
+    // if the any day of day already exist
+    for (let index = 0; index < weeklyHolidays.length; index++) {
+        const day = weeklyHolidays[index];
+        const holidy = await Shift.findOne({ branch: branchId, name: nameShift, weeklyHolidays: { $elemMatch: { $eq: day } } })
+        if (holidy) {
+            index = weeklyHolidays.length - 1
+            return res.status(400).send({ error_en: `The Day :${nameDays[day]} is Already Exist` })
+        }
+    }
+    // update holidays 
+    const upateHolidys = {
+        $push: {
+            weeklyHolidays: weeklyHolidays.map((day: Array<Number>) => { return day }),
+        },
+        $pull: {
+            origianalDays: weeklyHolidays.map((day: Array<Number>) => { return day })
+        }
+    }
+    await Shift.updateOne({ branch: branchId, name: nameShift }, upateHolidys)
+    const newHolid = await Shift.findOne({ branch: branchId, name: nameShift })
+    res.send({
+        success: true,
+        data: newHolid?.weeklyHolidays,
+        message_en: 'Holidays are updated successfully'
+    })
+}
+//@desc         add weeklyWorkDays in shift
+//@route        POST /api/v1/shift/workdays/:branch/:name
+//@access       private(root,admin)
+export const addWorkDays = async (req: AuthenticatedReq, res: Response, next: NextFunction) => {
+    const branchId = req.params.branch
+    const nameShift = req.params.name
+    const { origianalDays } = req.body
+    // if the shift invaild
+    const shift = await Shift.findOne({ branch: branchId, name: nameShift })
+    if (!shift) return res.status(400).send({ error_en: "Invaild shift !!" })
+    // if the any day of days already exist
+    for (let index = 0; index < origianalDays.length; index++) {
+        const day = origianalDays[index];
+        const holidy = await Shift.findOne({ branch: branchId, name: nameShift, origianalDays: { $elemMatch: { $eq: day } } })
+        if (holidy) {
+            index = origianalDays.length - 1
+            return res.status(400).send({ error_en: `The Day :${nameDays[day]} is Already Exist` })
+        }
+    }
+    // update workdays 
+    const upateWorkDays = {
+        $pull: {
+            weeklyHolidays: origianalDays.map((day: Array<Number>) => { return day }),
+        },
+        $push: {
+            origianalDays: origianalDays.map((day: Array<Number>) => { return day })
+        }
+    }
+    await Shift.updateOne({ branch: branchId, name: nameShift }, upateWorkDays)
+    const newWorkDay = await Shift.findOne({ branch: branchId, name: nameShift })
+    return res.send({
+        success: true,
+        data: newWorkDay?.origianalDays,
+        message_en: 'Holidays are updated successfully'
     })
 }

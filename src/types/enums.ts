@@ -211,4 +211,13 @@ export const nationalities = [
     'Zimbabwean'
 ];
 export const days = [0, 1, 2, 3, 4, 5, 6]
-export const TypeShift = ['day','month','year','week']
+export const nameDays :any= {
+    0:"Sunday",
+    1:"Monday",
+    2:"Tuseday",
+    3:"Wednesday",
+    4:"Thursday",
+    5:"Friday",
+    6:"Saturday"
+}
+export const TypeShift = ['day', 'month', 'year', 'week']
