@@ -1,7 +1,5 @@
 import mongoose, { Schema } from 'mongoose'
-import Joi from 'joi'
-import { IRequest } from './Request';
-interface ISubCategory {
+export interface ISubCategory {
     subType: String,
     haveTime: Boolean,
     category: mongoose.Schema.Types.ObjectId,
@@ -30,15 +28,3 @@ export default SubCategory;
 
 
 
-export function validateSubCategory(subCategory: ISubCategory, request: IRequest) {
-
-    // check the truthness of have time 
-    const haveTime = subCategory.haveTime;
-    if (haveTime) {
-        const schema = Joi.object({
-            startDate: Joi.date().required(),
-            endDate: Joi.date().required(),
-        })
-        schema.validate(request)
-    }
-}

@@ -4,8 +4,8 @@ import { checkRole } from "../../middlewares/acsses";
 import { Router } from "express";
 import { Roles } from "../../types/enums";
 import { validator } from "../../middlewares/validate";
-import { validateRequest } from "../../models/Request";
 import { addRequest, getAllRequests, getRequestById, updateRequest, deleteRequest } from "../../controllers/request/request.controller";
+import { validateRequest } from "../../validators/request.validator";
 const router: Router = Router();
 // all(AuthenticationMiddleware, AuthuthrationMiddleware('request'), checkRole(Roles.ROOT), validator())
 

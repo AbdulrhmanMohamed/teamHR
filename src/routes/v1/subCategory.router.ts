@@ -1,7 +1,6 @@
 import { Router, Response, Request, NextFunction } from "express"
 import { checkRole } from '../../middlewares/acsses';
 import { validator } from "../../middlewares/validate";
-import { validateSubCategory } from "../../models/SubCategory";
 import { checkSubscripe } from '../../middlewares/subscription';
 import { AuthuthrationMiddleware } from '../../middlewares/authuthration';
 import { AuthenticationMiddleware } from "../../middlewares/auth";
