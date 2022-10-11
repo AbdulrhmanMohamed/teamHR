@@ -30,11 +30,11 @@ export const getAllBreaks = async (req: Request, res: Response) => {
 //@access       private(root,admin)
 export const updateBreak = async (req: Request, res: Response) => {
     const { start, end, duration, isOpen } = req.body
-    const bk = await Break.findOne({ shift: req.params.shift, _id: req.params.shift })
+    const bk = await Break.findOne({ shift: req.params.shift, _id: req.params.id })
     if (!bk) return res.status(400).send({ error_en: "Invalid break !!" })
     // if want just update the start and the end for break 
     if (!isOpen && !bk.isOpen) {
-        await Break.updateOne({ shift: req.params.shift, _id: req.params.shift }, {
+        await Break.updateOne({ shift: req.params.shift, _id: req.params.id }, {
             $set: {
                 start: {
                     hours: start.hours ? start.hours : bk.start.hours,
@@ -49,7 +49,7 @@ export const updateBreak = async (req: Request, res: Response) => {
     }
     // if want make the break open so will update isOpen and update duration for break 
     else if (isOpen && !bk.isOpen) {
-        await Break.updateOne({ shift: req.params.shift, _id: req.params.shift }, {
+        await Break.updateOne({ shift: req.params.shift, _id: req.params.id }, {
             $set: {
                 isOpen: isOpen,
                 duration: {
@@ -63,7 +63,7 @@ export const updateBreak = async (req: Request, res: Response) => {
     }
     // if want make the break specific time so will update isOpen and update start and end for break 
     else if (!isOpen && bk.isOpen) {
-        await Break.updateOne({ shift: req.params.shift, _id: req.params.shift }, {
+        await Break.updateOne({ shift: req.params.shift, _id: req.params.id }, {
             $set: {
                 isOpen: isOpen,
                 duration: null,
@@ -80,7 +80,7 @@ export const updateBreak = async (req: Request, res: Response) => {
     }
     //if want just update the duration for break
     else if (isOpen && bk.isOpen) {
-        await Break.updateOne({ shift: req.params.shift, _id: req.params.shift }, {
+        await Break.updateOne({ shift: req.params.shift, _id: req.params.id }, {
             $set: {
                 isOpen: isOpen,
                 duration: {
@@ -90,18 +90,18 @@ export const updateBreak = async (req: Request, res: Response) => {
             }
         })
     }
-    const newBk = await Break.findOne({ shift: req.params.shift, _id: req.params.shift })
+    const newBk = await Break.findOne({ shift: req.params.shift, _id: req.params.id })
     res.send({
         success: true,
         data: newBk,
         message_en: 'Break is update successfully'
     })
 }
-//@desc         get a breaks in shift
+//@desc         get a breakDetails in shift
 //@route        GET /api/v1/break/:shift/:id
 //@access       private(root,admin)
 export const getBreakById = async (req: Request, res: Response) => {
-    const bk: any = await Break.findOne({ shift: req.params.shift, _id: req.params.shift })
+    const bk: any = await Break.findOne({ shift: req.params.shift, _id: req.params.id })
     if (!bk) return res.status(400).send({ error_en: "Invalid break !!" })
     res.send({
         success: true,
@@ -113,9 +113,9 @@ export const getBreakById = async (req: Request, res: Response) => {
 //@route        DELETE /api/v1/break/:shift/:id
 //@access       private(root,admin)
 export const deleteBreakById = async (req: Request, res: Response) => {
-    const bk: any = await Break.findOne({ shift: req.params.shift, _id: req.params.shift })
+    const bk: any = await Break.findOne({ shift: req.params.shift, _id: req.params.id })
     if (!bk) return res.status(400).send({ error_en: "Invalid break !!" })
-    await Break.deleteOne({ shift: req.params.shift, _id: req.params.shift })
+    await Break.deleteOne({ shift: req.params.shift, _id: req.params.id })
     res.send({
         success: true,
         message_en: 'Break is deleted successfully'

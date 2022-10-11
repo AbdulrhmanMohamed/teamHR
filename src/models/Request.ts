@@ -6,15 +6,16 @@ export interface IRequest {
     description: String,
     from: mongoose.Schema.Types.ObjectId,
     to: [mongoose.Schema.Types.ObjectId]
-    startTime: Date,
-    endTime: Date,
+    startDate: Date,
+    endDate: Date,
+    status: Boolean
 }
 
 const requestSchema = new Schema<IRequest>({
     title: {
-        type: String,
-        required: true,
-
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "SubCategory",
+        required: true
     },
     description: {
         type: String,
@@ -30,15 +31,17 @@ const requestSchema = new Schema<IRequest>({
         ref: 'User',
         required: true
     }],
-    startTime: {
+    startDate: {
         type: Date
     },
-    endTime: {
+    endDate: {
         type: Date,
-    }
+    },
+    status: Boolean
 
-})
+}, { timestamps: true })
 const Request = mongoose.model<IRequest>('Request', requestSchema)
 export default Request;
+
 
 

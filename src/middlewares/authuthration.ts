@@ -17,8 +17,8 @@ export const AuthuthrationMiddleware = (type: string) => async function (
     if (type === "company") {
         if (!companies[0]) return res.status(404).send({ error_en: "You don't have any company for now.." })
     }
-    else if (type === "branch") {
-        const companyValid = await Company.findOne({ owner: owner, _id: company })
+    else if (type === "branch") {        
+        const companyValid = await Company.findOne({ owner: owner, _id: company ? company : req.params.company })
         if (!companyValid) return res.status(401).send({ error_en: "You cannot (add or update or get) any branch in this company because you are not the owner of the company" })
     }
     else if (type === "departement" || type === "shift") {

@@ -1,4 +1,4 @@
-import { addShift, getAllShifts, getShift } from './../../controllers/shifts/shift.controller';
+import { addShift, getAllShifts, getShift, addHolidays, addWorkDays } from './../../controllers/shifts/shift.controller';
 import { validator } from './../../middlewares/validate';
 import { Roles } from './../../types/enums';
 import { AuthenticationMiddleware } from './../../middlewares/auth';
@@ -17,4 +17,10 @@ router.route('/:branch')
 router.route('/:branch/:name')
     .all(AuthenticationMiddleware, AuthuthrationMiddleware("shift"), checkSubscripe, checkRole(Roles.ROOT, Roles.ADMIN))
     .get(getShift).put(validator(validateShift, "put"))
+router.route('holidays/:branch/:name')
+    .all(AuthenticationMiddleware, AuthuthrationMiddleware("shift"), checkSubscripe, checkRole(Roles.ROOT, Roles.ADMIN))
+    .post(addHolidays)
+router.route('workdays/:branch/:name')
+    .all(AuthenticationMiddleware, AuthuthrationMiddleware("shift"), checkSubscripe, checkRole(Roles.ROOT, Roles.ADMIN))
+    .post(addWorkDays)
 export default router 
