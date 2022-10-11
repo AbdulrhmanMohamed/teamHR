@@ -58,6 +58,9 @@ export const getBreakById = async (req: Request, res: Response) => {
         message_en: 'Overtime is fetched successfully'
     })
 }
+//@desc         Assign user to OverTime
+//@route        POST /api/v1/over/assign/:shift/:id
+//@access       private(root,admin)
 export const assginUser = async (req: Request, res: Response) => {
     const userId = req.body.userId;
     let user: any;
@@ -66,6 +69,7 @@ export const assginUser = async (req: Request, res: Response) => {
     const overtime = await Overtime.findById(req.params.id);
     if (!overtime) return res.status(400).send("Create overtime shift first");
     const assignedOvertime = await Overtime.findOne({
+        shift: req.params.shift, _id: req.params.id,
         users: { $elemMatch: { $eq: userId } }, $or: [
             { $and: [{ start: { $gte: overtime.start } }, { end: { $lte: overtime.end } }] },
             { $and: [{ start: { $lte: overtime.start } }, { end: { $gte: overtime.end } }] },
@@ -73,7 +77,7 @@ export const assginUser = async (req: Request, res: Response) => {
             { $and: [{ start: { $lt: overtime.end } }, { end: { $gte: overtime.end } }] },
         ]
     })
-    const workingShift = await Shift.findOne({branch: user.workShift,});
+    const workingShift = await Shift.findOne({ _id: user.workShift, });
     // to know the user dose not have a shift in the time overtime
     //get day for overTime
     const day: any = assignedOvertime?.start.getDay()
@@ -93,10 +97,27 @@ export const assginUser = async (req: Request, res: Response) => {
             return res.status(400).send({ error_en: "user has a shift in the same time overtime" });
     }
     if (assignedOvertime) return res.status(400).send('user is already signed in another overtime in the selected time');
-    await overtime.update({ $addToSet: { users: userId } }).exec();
+    await overtime.updateOne({ req }, { $addToSet: { users: userId } }).exec();
     res.send({
         success: true,
         data: overtime.users,
         message_en: 'user is signed to overtime successfully'
     })
+}
+//@desc         Unssign user to OverTime
+//@route        POST /api/v1/over/unassign/:shift/:id
+//@access       private(root,admin)
+export const unassignUser = async (req: Request, res: Response) => {
+    const userId = req.body.userId;
+    let user;
+    if (userId) user = await User.findById(userId);
+    if (!user) return res.status(400).send("User you are trying to assing to is not available");
+    const overtime = await Overtime.findByIdAndUpdate({ shift: req.params.shift, _id: req.params.id }, { $pull: { users: userId } }, { new: true });
+    if (!overtime) return res.status(400).send("Create overtime shift first");
+    res.send({
+        success: true,
+        data: overtime.users,
+        message_en: 'user is unassign from overtime successfully'
+    })
+
 }
