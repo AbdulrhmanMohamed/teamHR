@@ -15,6 +15,11 @@ export enum Roles {
     EMPLOYEE = "employee",
     USER = "user",
 }
+export enum TaskStatus{
+    PENDING="pending",
+    INPROGRESS="in progress",
+    COMPLETED="completed"
+}
 export const nationalities = [
     'Afghan',
     'Albanian',

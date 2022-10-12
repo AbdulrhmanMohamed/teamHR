@@ -16,7 +16,8 @@ import request from './routes/v1/request.router'
 import category from './routes/v1/category.router'
 import subCategory from './routes/v1/subCategory.router'
 import contract from './routes/v1/contract.router'
-
+import payrol from './routes/v1/payrol.router'
+import task from './routes/v1/task.router'
 Joi.objectId = require('joi-objectid')(Joi);
 import company from "./routes/v1/company.router"
 
@@ -41,6 +42,8 @@ app.use('/teamHR/api/v1/auth/', authRouter)
     .use('/teamHR/api/v1/subCategory', subCategory)
     .use('/teamHR/api/v1/request', request)
     .use('/teamHR/api/v1/contract',contract)
+    .use('/teamHR/api/v1/payrol',payrol)
+    .use('/teamHR/api/v1/task',task)
     .all('*', (req: Request, res: Response) => res.status(404).send({ message: "Undefinded Routes" }));
 
 export default app;
