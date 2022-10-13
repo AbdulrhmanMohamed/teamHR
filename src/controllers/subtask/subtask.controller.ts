@@ -38,7 +38,7 @@ export const updateSubTask=async(req:AuthenticatedReq,res:Response)=>{
     const subTask=await SubTask.findByIdAndUpdate(subTaskId,{...req.body},{new:true})
     if(!subTask)
         return res.status(400).send({success:false,message:'subTask not Found'})
-    res.status(200).send({success:true,message:'SubTask Updated Successfully'})
+    res.status(200).send({success:true,message:'SubTask Updated Successfully',subTask})
 }
 //@DESC : Update 
 export const deleteSubTask=async(req:AuthenticatedReq,res:Response)=>{

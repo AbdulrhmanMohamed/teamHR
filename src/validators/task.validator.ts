@@ -6,7 +6,10 @@ export const taskValidation=(task:ITask)=>{
         start:Joi.date().required(),
         end:Joi.date().required(),
         from:Joi.objectId().required(),
-        to:Joi.array().items(Joi.objectId().required())
+        to:Joi.array().items(Joi.objectId().required()),
+        status:Joi.string().required(),
+        title:Joi.string().required(),
+        description:Joi.string().required(),
     })
     return  schema.validate(task)
 }
